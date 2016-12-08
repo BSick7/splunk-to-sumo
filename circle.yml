@@ -1,0 +1,28 @@
+machine:
+  environment:
+    GOPATH: "$HOME/.go_workspace"
+    IMPORT_PATH: "github.mdl.cloud/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME"
+    BUILD_PATH: "$GOPATH/src/$IMPORT_PATH"
+
+checkout:
+  post:
+    - mkdir -p "$BUILD_PATH"
+    - rm -rf "$BUILD_PATH"
+    - rsync -az --delete ./ "$BUILD_PATH/"
+
+dependencies:
+  cache_directories:
+    - /home/ubuntu/go
+  pre:
+    - bash -c "$(curl -fsSL https://gist.github.com/BSick7/5ca8ad3eeec138a0bf51da775de4279e/raw)"
+    - go version
+
+test:
+  override:
+    - cd "$BUILD_PATH" && go vet
+
+deployment:
+  release:
+    branch: master
+    commands:
+      - cd "$BUILD_PATH" && make release
