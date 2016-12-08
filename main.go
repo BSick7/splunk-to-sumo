@@ -12,16 +12,16 @@ import (
 var Version string
 
 func main() {
-	if len(os.Args) != 2 {
+	if len(os.Args) != 3 {
 		usage()
 		os.Exit(0)
 	}
 
-	bind := os.Args[0]
-	host := os.Args[1]
+	bind := os.Args[1]
+	host := os.Args[2]
 
 	server := newSplunkToSumoServer(host)
-	fmt.Printf("Starting splunk-to-sumo %s on %s...\n", Version, bind)
+	fmt.Printf("Starting splunk-to-sumo v%s on %s with hostname=%s...\n", Version, bind, host)
 	http.ListenAndServe(fmt.Sprintf(bind), server)
 }
 
