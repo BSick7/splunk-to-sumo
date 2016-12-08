@@ -12,23 +12,36 @@ import (
 var Version string
 
 func main() {
-	bind := "0.0.0.0:5001"
-	if len(os.Args) > 0 {
-		bind = os.Args[0]
+	if len(os.Args) != 2 {
+		usage()
+		os.Exit(0)
 	}
 
-	server := newSplunkToSumoServer()
-	fmt.Println("Starting splunk-to-sumo %s on %s", Version, bind)
+	bind := os.Args[0]
+	host := os.Args[1]
+
+	server := newSplunkToSumoServer(host)
+	fmt.Printf("Starting splunk-to-sumo %s on %s...\n", Version, bind)
 	http.ListenAndServe(fmt.Sprintf(bind), server)
+}
+
+func usage() {
+	fmt.Println(`usage: splunk-to-sumo [bind-address] [sumo-host]
+
+  bind-address      This specifies which ip:port to bind the server.
+
+  sumo-host         This will forward messages to sumologic with
+                    this set as the X-Sumo-Host header.
+`)
 }
 
 type splunkToSumoServer struct {
 	rp *httputil.ReverseProxy
 }
 
-func newSplunkToSumoServer() *splunkToSumoServer {
+func newSplunkToSumoServer(sumoHost string) *splunkToSumoServer {
 	return &splunkToSumoServer{
-		rp: newSplunkToSumoReverseProxy(),
+		rp: newSplunkToSumoReverseProxy(sumoHost),
 	}
 }
 
@@ -42,7 +55,7 @@ func (s *splunkToSumoServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func newSplunkToSumoReverseProxy() *httputil.ReverseProxy {
+func newSplunkToSumoReverseProxy(sumoHost string) *httputil.ReverseProxy {
 	return &httputil.ReverseProxy{
 		Director: func(req *http.Request) {
 			// Authorization header is packed with sumologic data
@@ -51,6 +64,7 @@ func newSplunkToSumoReverseProxy() *httputil.ReverseProxy {
 			endpoint, _ := url.Parse(rawUrl)
 			req.Header.Add("X-Sumo-Category", endpoint.Query().Get("category"))
 			req.Header.Add("X-Sumo-Name", endpoint.Query().Get("name"))
+			req.Header.Add("X-Sumo-Host", sumoHost)
 			endpoint.RawQuery = ""
 			req.URL = endpoint
 

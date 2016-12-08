@@ -5,11 +5,17 @@ It is a reverse proxy that is typically configured side-by-side on a docker work
 
 ## Run
 
-Running the proxy server is super simple, just specify the bind address as the first argument.
-If not specified, will default to :5001
+Running the proxy server is super simple.
+Here is usage output:
 
 ```
-$ ./splunk-to-sumo 0.0.0.0:5001
+$ ./splunk-to-sumo
+usage: splunk-to-sumo [bind-address] [sumo-host]
+
+  bind-address      This specifies which ip:port to bind the server.
+
+  sumo-host         This will forward messages to sumologic with
+                    this set as the X-Sumo-Host header.
 ```
 
 ## Configure docker logging
