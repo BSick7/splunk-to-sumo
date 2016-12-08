@@ -62,15 +62,11 @@ func newSplunkToSumoReverseProxy(sumoHost string) *httputil.ReverseProxy {
 			auth := req.Header.Get("Authorization")
 			rawUrl := strings.TrimPrefix(auth, "Splunk ")
 			endpoint, _ := url.Parse(rawUrl)
-			req.Header.Add("X-Sumo-Category", endpoint.Query().Get("category"))
 			req.Header.Add("X-Sumo-Name", endpoint.Query().Get("name"))
+			req.Header.Add("X-Sumo-Category", endpoint.Query().Get("category"))
 			req.Header.Add("X-Sumo-Host", sumoHost)
 			endpoint.RawQuery = ""
 			req.URL = endpoint
-
-			fmt.Println(req.Header)
-
-			fmt.Printf("Forwarding to %s\n", req.URL)
 
 			req.Header.Del("Authorization")
 			req.Header.Del("Content-Type")
