@@ -25,3 +25,8 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 	}
 }
+
+func (s *Server) ListenAndServe(config HttpConfig) error {
+	httpServer := config.CreateServer(s)
+	return httpServer.ListenAndServe()
+}

@@ -1,3 +1,13 @@
+## 0.1.2 (Feb 28, 2017)
+
+ENHANCEMENTS:
+
+  * Setting overridable `ReadTimeout`, `WriteTimeout`, `IdleTimeout` on http proxy.
+
+BUILD:
+
+  * Building with golang 1.8+.
+
 ## 0.1.1 (Dec 09, 2016)
 
 ENHANCEMENTS:

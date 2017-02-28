@@ -16,6 +16,20 @@ usage: splunk-to-sumo [bind-address] [sumo-host]
 
   sumo-host         This will forward messages to sumologic with
                     this set as the X-Sumo-Host header.
+
+Environment Variables:
+
+  STS_READ_TIMEOUT  This specifies the ReadTimeout on the listening http server.
+                    This must be parsable by golang time.ParseDuration.
+                    default=5s
+
+  STS_WRITE_TIMEOUT This specifies the WriteTimeout on the listening http server.
+                    This must be parsable by golang time.ParseDuration.
+                    default=10s
+
+  STS_IDLE_TIMEOUT  This specifies the IdleTimeout on the listening http server.
+                    This must be parsable by golang time.ParseDuration.
+                    default=120s
 ```
 
 ## Configure docker logging
