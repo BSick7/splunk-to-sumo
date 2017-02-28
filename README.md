@@ -18,6 +18,15 @@ usage: splunk-to-sumo [bind-address] [sumo-host]
                     this set as the X-Sumo-Host header.
 ```
 
+The following environment variables support configuration of the listening http server.
+These env vars expect values parsable by golang time.ParseDuration.
+
+```
+STS_READ_TIMEOUT (default=5s)
+STS_WRITE_TIMEOUT (default=10s)
+STS_IDLE_TIMEOUT (default=120s)
+```
+
 ## Configure docker logging
 
 When running a docker container, configure to use splunk logging driver.
