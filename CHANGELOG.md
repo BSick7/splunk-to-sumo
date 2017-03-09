@@ -1,3 +1,9 @@
+## 0.1.3 (Feb 09, 2017)
+
+ENHANCEMENTS:
+
+  * Reusing HTTP connections through closing of response body.
+
 ## 0.1.2 (Feb 28, 2017)
 
 ENHANCEMENTS:
