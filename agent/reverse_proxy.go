@@ -9,7 +9,7 @@ import (
 
 func NewReverseProxy(sumoHost string) *httputil.ReverseProxy {
 	return &httputil.ReverseProxy{
-		Transport: NewErrorTransport(http.DefaultTransport),
+		Transport: NewResponseCloseTransport(NewErrorTransport(http.DefaultTransport)),
 		Director: func(req *http.Request) {
 			// Authorization header is packed with sumologic data
 			auth := req.Header.Get("Authorization")
