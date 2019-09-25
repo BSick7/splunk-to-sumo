@@ -1,3 +1,9 @@
+## 0.1.4 (Oct 09, 2018)
+
+ENHANCEMENTS:
+
+  * Add newlines to body to make it compatible with a splunk buffering
+
 ## 0.1.3 (Feb 09, 2017)
 
 ENHANCEMENTS:
