@@ -5,6 +5,9 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"strings"
+	"io/ioutil"
+	"strconv"
+	"bytes"
 )
 
 func NewReverseProxy(sumoHost string) *httputil.ReverseProxy {
@@ -20,6 +23,14 @@ func NewReverseProxy(sumoHost string) *httputil.ReverseProxy {
 			req.Header.Add("X-Sumo-Host", sumoHost)
 			endpoint.RawQuery = ""
 			req.URL = endpoint
+
+			// we need to modify body to make it compatible with buffering
+			body, _ := ioutil.ReadAll(req.Body)
+			newbody := bytes.Replace(body,[]byte("}{"),[]byte("}\n{"),-1)
+			req.Body = ioutil.NopCloser(bytes.NewBuffer(newbody))
+			req.ContentLength = int64(len(newbody))
+
+			req.Header.Set("Content-Length", strconv.Itoa(len(newbody)))
 
 			req.Header.Del("Authorization")
 			req.Header.Del("Content-Type")
